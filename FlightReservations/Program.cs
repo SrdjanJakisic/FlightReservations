@@ -1,5 +1,7 @@
 using FlightReservations.Data;
 using FlightReservations.Models;
+using FlightReservations.Repositories;
+using FlightReservations.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
+
+builder.Services.AddScoped<IFlightRepository, FlightRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<FlightService>();
+builder.Services.AddScoped<ReservationService>();
 
 var app = builder.Build();
 
