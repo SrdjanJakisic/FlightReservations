@@ -1,0 +1,22 @@
+﻿@model CreateReservationViewModel
+@{
+    ViewData["Title"] = "Reserve";
+}
+
+<h2>Reserve seats</h2>
+
+<p>Available seats: <strong>@Model.AvailableSeats</strong></p>
+
+<form asp-action="Reserve" method="post">
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+    <input type="hidden" asp-for="FlightId" />
+    <input type="hidden" asp-for="AvailableSeats" />
+
+    <div class="mb-3">
+        <label asp-for="NumberOfSeats" class="form-label"></label>
+        <input asp-for="NumberOfSeats" class="form-control" style="max-width: 150px;" />
+        <span asp-validation-for="NumberOfSeats" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Confirm reservation</button>
+</form>

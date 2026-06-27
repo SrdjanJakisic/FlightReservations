@@ -26,7 +26,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Agent"))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-controller="FlightReservations" asp-action="Index">Flights</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="FlightReservations" asp-action="Pending">Pending</a></li>
+                            }
+                            @if (User.IsInRole("Visitor"))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-controller="FlightReservations" asp-action="Search">Search</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="FlightReservations" asp-action="MyReservations">My reservations</a></li>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item"><a class="nav-link" asp-controller="FlightReservations" asp-action="Index">Flights</a></li>
+                                <li class="nav-item"><a class="nav-link" asp-controller="Users" asp-action="Create">Create user</a></li>
+                            }
+                        }                   
                         </ul>
                 </div>
                 @if (User.Identity != null && User.Identity.IsAuthenticated)

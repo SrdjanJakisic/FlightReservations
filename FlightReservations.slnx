@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="FlightReservations.Tests/FlightReservations.Tests.csproj" />
   <Project Path="FlightReservations/FlightReservations.csproj" />
 </Solution>

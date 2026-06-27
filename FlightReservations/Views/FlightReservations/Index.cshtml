@@ -1,0 +1,54 @@
+﻿@model List<FlightListItemViewModel>
+@{
+    ViewData["Title"] = "Flights";
+}
+
+<h2>Flights</h2>
+
+@if (User.IsInRole("Agent"))
+{
+    <a class="btn btn-primary mb-3" asp-action="Create">Add flight</a>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Departure</th>
+            <th>Stops</th>
+            <th>Total</th>
+            <th>Available</th>
+            <th>Status</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.AvailableSeats < 5 ? "table-danger" : "")">
+                <td>@item.Flight.Origin</td>
+                <td>@item.Flight.Destination</td>
+                <td>@item.Flight.DepartureDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Flight.NumberOfStops</td>
+                <td>@item.Flight.TotalSeats</td>
+                <td>@item.AvailableSeats</td>
+                <td>@item.Flight.Status</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @if (item.Flight.Status == FlightStatus.Active)
+                        {
+                            <form asp-action="Cancel" method="post" asp-route-id="@item.Flight.Id">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                            </form>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

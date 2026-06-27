@@ -1,0 +1,36 @@
+﻿@model CreateFlightViewModel
+@{
+    ViewData["Title"] = "Add flight";
+}
+
+<h2>Add flight</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+    <div class="mb-3">
+        <label asp-for="Origin" class="form-label"></label>
+        <select asp-for="Origin" asp-items="Html.GetEnumSelectList<City>()" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Destination" class="form-label"></label>
+        <select asp-for="Destination" asp-items="Html.GetEnumSelectList<City>()" class="form-select"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DepartureDate" class="form-label"></label>
+        <input asp-for="DepartureDate" class="form-control" />
+        <span asp-validation-for="DepartureDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="NumberOfStops" class="form-label"></label>
+        <input asp-for="NumberOfStops" class="form-control" />
+        <span asp-validation-for="NumberOfStops" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TotalSeats" class="form-label"></label>
+        <input asp-for="TotalSeats" class="form-control" />
+        <span asp-validation-for="TotalSeats" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

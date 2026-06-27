@@ -1,0 +1,58 @@
+﻿@model SearchFlightsViewModel
+@{
+    ViewData["Title"] = "Search flights";
+}
+
+<h2>Search flights</h2>
+
+<form asp-action="Search" method="post" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label asp-for="Origin" class="form-label"></label>
+        <select asp-for="Origin" asp-items="Html.GetEnumSelectList<City>()" class="form-select"></select>
+    </div>
+    <div class="col-auto">
+        <label asp-for="Destination" class="form-label"></label>
+        <select asp-for="Destination" asp-items="Html.GetEnumSelectList<City>()" class="form-select"></select>
+    </div>
+    <div class="col-auto align-self-end">
+        <div class="form-check">
+            <input asp-for="DirectOnly" class="form-check-input" />
+            <label asp-for="DirectOnly" class="form-check-label"></label>
+        </div>
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+@if (Model.Results != null)
+{
+    @if (Model.Results.Count == 0)
+    {
+        <p>No flights with available seats for this route.</p>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr><th>From</th><th>To</th><th>Departure</th><th>Stops</th><th>Available</th><th></th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Results)
+                {
+                    <tr>
+                        <td>@item.Flight.Origin</td>
+                        <td>@item.Flight.Destination</td>
+                        <td>@item.Flight.DepartureDate.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@item.Flight.NumberOfStops</td>
+                        <td>@item.AvailableSeats</td>
+                        <td>
+                            <a class="btn btn-sm btn-success"
+                               asp-action="Reserve" asp-route-flightId="@item.Flight.Id">Reserve</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
