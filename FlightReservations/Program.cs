@@ -1,4 +1,5 @@
 using FlightReservations.Data;
+using FlightReservations.Hubs;
 using FlightReservations.Models;
 using FlightReservations.Repositories;
 using FlightReservations.Services;
@@ -36,6 +37,7 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<FlightService>();
 builder.Services.AddScoped<ReservationService>();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -61,6 +63,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+app.MapHub<ReservationHub>("/reservationHub");
 
 using (var scope = app.Services.CreateScope())
 {

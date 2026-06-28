@@ -14,7 +14,7 @@ namespace FlightReservations.ViewModels
         [Range(0, 10)]
         [Display(Name = "Number of stops")]
         public int NumberOfStops { get; set; }
-        [Range(0, 1000)]
+        [Range(1, 1000)]
         [Display(Name = "Total seats")]
         public int TotalSeats { get; set; }
     }

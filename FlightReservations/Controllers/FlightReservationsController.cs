@@ -1,9 +1,11 @@
-﻿using FlightReservations.Models;
+﻿using FlightReservations.Hubs;
+using FlightReservations.Models;
 using FlightReservations.Services;
 using FlightReservations.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FlightReservations.Controllers
 {
@@ -13,14 +15,17 @@ namespace FlightReservations.Controllers
         private readonly FlightService _flightService;
         private readonly ReservationService _reservationService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHubContext<ReservationHub> _hub;
 
         public FlightReservationsController(FlightService flightService,
             ReservationService reservationService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHubContext<ReservationHub> hub)
         {
             _flightService = flightService;
             _reservationService = reservationService;
             _userManager = userManager;
+            _hub = hub;
         }
         [Authorize(Roles = "Agent, Admin")]
         public async Task<IActionResult> Index()
@@ -42,6 +47,9 @@ namespace FlightReservations.Controllers
         [Authorize(Roles = "Agent")]
         [HttpGet]
         public IActionResult Create() => View();
+        [Authorize(Roles = "Agent")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateFlightViewModel model)
         {
             if (model.Origin == model.Destination)
@@ -126,6 +134,8 @@ namespace FlightReservations.Controllers
                 return View(model);
             }
 
+            await _hub.Clients.Group("Agents").SendAsync("ReservationCreated");
+
             return RedirectToAction(nameof(MyReservations));
         }
         [Authorize(Roles = "Visitor")]
@@ -147,7 +157,11 @@ namespace FlightReservations.Controllers
         public async Task<IActionResult> Approve(int id)
         {
             var agentId = _userManager.GetUserId(User)!;
-            await _reservationService.ApproveReservationAsync(id, agentId);
+            var visitorId = await _reservationService.ApproveReservationAsync(id, agentId);
+
+            if (visitorId != null)
+                await _hub.Clients.User(visitorId).SendAsync("ReservationApproved", id);
+
             return RedirectToAction(nameof(Pending));
         }
     }

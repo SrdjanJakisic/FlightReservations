@@ -18,15 +18,32 @@ else
         <tbody>
             @foreach (var r in Model)
             {
-                <tr>
+                <tr data-reservation-id="@r.Id">
                     <td>@r.Flight.Origin</td>
                     <td>@r.Flight.Destination</td>
                     <td>@r.Flight.DepartureDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@r.NumberOfSeats</td>
-                    <td>@r.Status</td>
+                    <td class="status-cell">@r.Status</td>
                     <td>@r.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
                 </tr>
             }
         </tbody>
     </table>
+}
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder().withUrl("/reservationHub").build();
+        connection.on("ReservationApproved", (reservationId) => {
+        const row = document.querySelector(`tr[data-reservation-id="${reservationId}"]`);
+        if(row)
+        {
+            const cell = row.querySelector(".status-cell");
+            if(cell) cell.textContent = "Approved";
+        }
+        });
+
+        connection.start().catch(err => console.error(err));
+    </script>
 }

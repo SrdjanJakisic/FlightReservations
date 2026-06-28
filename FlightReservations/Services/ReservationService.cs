@@ -54,15 +54,15 @@ namespace FlightReservations.Services
                 return (false, "Could not complete the reservation duo to a conflict. Please try agan.");
             }
         }
-        public async Task<bool> ApproveReservationAsync(int reservationId, string agentId)
+        public async Task<string?> ApproveReservationAsync(int reservationId, string agentId)
         {
             var reservation = await _unitOfWork.Reservations.GetByIdAsync(reservationId);
-            if (reservation == null || reservation.Status != ReservationStatus.Pending) return false;
+            if (reservation == null || reservation.Status != ReservationStatus.Pending) return null;
 
             reservation.Status = ReservationStatus.Approved;
             reservation.ApprovedById = agentId;
             await _unitOfWork.SaveChangesAsync();
-            return true;
+            return reservation.VisitorId;
         }
         public async Task<IEnumerable<Reservation>> GetReservationForVisitorAsync(string visitorId)
             => await _unitOfWork.Reservations.GetForVisitorAsync(visitorId);

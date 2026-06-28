@@ -121,7 +121,7 @@ namespace FlightReservations.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
                 });
 
             modelBuilder.Entity("FlightReservations.Models.Reservation", b =>
@@ -159,7 +159,7 @@ namespace FlightReservations.Migrations
 
                     b.HasIndex("VisitorId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

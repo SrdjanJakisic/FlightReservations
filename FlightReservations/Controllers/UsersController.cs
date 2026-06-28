@@ -17,6 +17,8 @@ namespace FlightReservations.Controllers
         }
         [HttpGet]
         public IActionResult Create() => View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserViewModel model)
         {
             if (!ModelState.IsValid) return View(model);

@@ -6,7 +6,7 @@ namespace FlightReservations.ViewModels
     {
         public int FlightId { get; set; }
         public int AvailableSeats { get; set; }
-        [Range(0, 1000)]
+        [Range(1, 1000)]
         [Display(Name = "Number of seats")]
         public int NumberOfSeats { get; set; } = 1;
     }
