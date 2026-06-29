@@ -15,8 +15,10 @@ namespace FlightReservations.Controllers
         {
             _userManager = userManager;
         }
+
         [HttpGet]
         public IActionResult Create() => View();
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserViewModel model)

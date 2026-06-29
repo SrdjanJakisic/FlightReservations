@@ -8,11 +8,13 @@ namespace FlightReservations.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly FlightService _flightService;
+
         public ReservationService(IUnitOfWork unitOfWork, FlightService flightService)
         {
             _unitOfWork = unitOfWork;
             _flightService = flightService;
         }
+
         public async Task<(bool Success, string? Error)> CreateReservationAsync(
             int flightId, string visitorId, int numberOfSeats)
         {
@@ -54,6 +56,7 @@ namespace FlightReservations.Services
                 return (false, "Could not complete the reservation duo to a conflict. Please try agan.");
             }
         }
+
         public async Task<string?> ApproveReservationAsync(int reservationId, string agentId)
         {
             var reservation = await _unitOfWork.Reservations.GetByIdAsync(reservationId);
@@ -64,8 +67,10 @@ namespace FlightReservations.Services
             await _unitOfWork.SaveChangesAsync();
             return reservation.VisitorId;
         }
+
         public async Task<IEnumerable<Reservation>> GetReservationForVisitorAsync(string visitorId)
             => await _unitOfWork.Reservations.GetForVisitorAsync(visitorId);
+
         public async Task<IEnumerable<Reservation>> GetPendingReservationsAsync()
             => await _unitOfWork.Reservations.GetPendingAsync();
     }

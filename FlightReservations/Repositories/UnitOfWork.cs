@@ -17,8 +17,10 @@ namespace FlightReservations.Repositories
             Flights = flights;
             Reservations = reservations;
         }
+
         public async Task BeginTransactionAsync(IsolationLevel isolationLevel) 
             => _transaction = await _db.Database.BeginTransactionAsync(isolationLevel);
+
         public async Task CommitTransactionAsync()
         {
             if (_transaction is null) return;
@@ -27,6 +29,7 @@ namespace FlightReservations.Repositories
             await _transaction.DisposeAsync();
             _transaction = null;
         }
+
         public async Task RollbackTransactionAsync()
         {
             if (_transaction is null) return;
@@ -34,6 +37,7 @@ namespace FlightReservations.Repositories
             await _transaction.DisposeAsync();
             _transaction = null;
         }
+
         public async Task<int> SaveChangesAsync() => await _db.SaveChangesAsync();
     }
 }

@@ -10,7 +10,9 @@ namespace FlightReservations.Repositories
         Task<int> SaveChangesAsync();
 
         Task BeginTransactionAsync(IsolationLevel isolationLevel);
+
         Task CommitTransactionAsync();
+
         Task RollbackTransactionAsync();
     }
 }

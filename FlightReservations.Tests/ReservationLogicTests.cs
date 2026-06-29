@@ -32,8 +32,6 @@ namespace FlightReservations.Tests
             Assert.False(success);
             Assert.Contains("3 days", error);
         }
-
-
         [Fact]
         public async Task GetAvailableSeats_SubtractsPendingAndApproved_IgnoresCancelled()
         {
@@ -72,7 +70,6 @@ namespace FlightReservations.Tests
 
             Assert.Equal(5, available);
         }
-
         [Fact]
         public async Task CreateReservation_MoreSeatsThanAvailable_Fails()
         {
@@ -87,7 +84,6 @@ namespace FlightReservations.Tests
             Assert.False(success);
             Assert.Contains("available", error);
         }
-
         [Fact]
         public async Task CreateReservation_Valid_CreatesPendingReservation()
         {

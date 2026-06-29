@@ -27,6 +27,7 @@ namespace FlightReservations.Controllers
             _userManager = userManager;
             _hub = hub;
         }
+
         [Authorize(Roles = "Agent, Admin")]
         public async Task<IActionResult> Index()
         {
@@ -44,9 +45,11 @@ namespace FlightReservations.Controllers
 
             return View(items);
         }
+
         [Authorize(Roles = "Agent")]
         [HttpGet]
         public IActionResult Create() => View();
+
         [Authorize(Roles = "Agent")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -69,6 +72,7 @@ namespace FlightReservations.Controllers
             await _flightService.CreateFlightAsync(flight);
             return RedirectToAction(nameof(Index));
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -77,9 +81,11 @@ namespace FlightReservations.Controllers
             await _flightService.CancelFlightAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
         [Authorize(Roles = "Visitor")]
         [HttpGet]
         public IActionResult Search() => View(new SearchFlightsViewModel());
+
         [Authorize(Roles = "Visitor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,6 +106,7 @@ namespace FlightReservations.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Visitor")]
         [HttpGet]
         public async Task<IActionResult> Reserve(int flightId)
@@ -112,6 +119,7 @@ namespace FlightReservations.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Visitor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -138,6 +146,7 @@ namespace FlightReservations.Controllers
 
             return RedirectToAction(nameof(MyReservations));
         }
+
         [Authorize(Roles = "Visitor")]
         public async Task<IActionResult> MyReservations()
         {
@@ -145,12 +154,14 @@ namespace FlightReservations.Controllers
             var reservations = await _reservationService.GetReservationForVisitorAsync(visitorId!);
             return View(reservations);
         }
+
         [Authorize(Roles = "Agent")]
         public async Task<IActionResult> Pending()
         {
             var reservations = await _reservationService.GetPendingReservationsAsync();
             return View(reservations);
         }
+
         [Authorize(Roles = "Agent")]
         [HttpPost]
         [ValidateAntiForgeryToken]

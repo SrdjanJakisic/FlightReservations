@@ -12,8 +12,10 @@ namespace FlightReservations.Controllers
         {
             _signInManager = signInManager;
         }
+
         [HttpGet]
         public IActionResult Login() => View();
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -27,6 +29,7 @@ namespace FlightReservations.Controllers
             ModelState.AddModelError(string.Empty, "Invalid username or password");
             return View(model);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -34,6 +37,7 @@ namespace FlightReservations.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
         [HttpGet]
         public IActionResult AccessDenied() => View();
     }

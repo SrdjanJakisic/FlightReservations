@@ -6,7 +6,9 @@ namespace FlightReservations.Services
     public class FlightService
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public FlightService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
+        
         public async Task<int> GetAvailableSeatsAsync(int flightId)
         {
             var flight = await _unitOfWork.Flights.GetByIdAsync(flightId);
@@ -15,6 +17,7 @@ namespace FlightReservations.Services
 
             return flight.TotalSeats - reserved;
         }
+
         public async Task<IEnumerable<Flight>> SearchAvailableFlightsAsync(City origin, City destination, bool directOnly)
         {
             var flights = await _unitOfWork.Flights.SearchAsync(origin, destination, directOnly);
@@ -27,13 +30,16 @@ namespace FlightReservations.Services
 
             return result;
         }
+
         public async Task<IEnumerable<Flight>> GetAllFlightsAsync() 
             => await _unitOfWork.Flights.GetAllAsync();
+
         public async Task CreateFlightAsync(Flight flight)
         {
             _unitOfWork.Flights.Create(flight);
             await _unitOfWork.SaveChangesAsync();
         }
+
         public async Task CancelFlightAsync(int flightId)
         {
             var flight = await _unitOfWork.Flights.GetByIdAsync(flightId);
